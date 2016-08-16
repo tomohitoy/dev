@@ -1,0 +1,56 @@
+- name: install yum repository
+  become: yes
+  become_method: sudo
+  yum: name=https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm 
+
+- name: install postgresql server
+  become: yes
+  become_method: sudo
+  yum: name={{ item }} state=installed
+  with_items:
+    - postgresql95
+    - postgresql95-server
+    - postgresql95-devel
+    - postgresql95-contrib
+    - python-psycopg2
+  environment:
+    LC_ALL: ja_JP.UTF-8
+
+- stat: path=/var/lib/pgsql/9.5/data/PG_VERSION
+  become: yes
+  become_method: sudo
+  register: dbcluster
+
+- name: initdb
+  shell: /usr/pgsql-9.5/bin/initdb -D /var/lib/pgsql/9.5/data
+  become: yes
+  become_user: postgres
+  when: not dbcluster.stat.exists
+
+- name: start postgresql server
+  become: yes
+  become_method: sudo
+  service: name=postgresql-9.5 state=started
+
+- name: create db
+  postgresql_db:
+    name: "{{ pg.dbname }}"
+    encoding: "UTF-8"
+    lc_collate: ja_JP.UTF-8
+    lc_ctype: ja_JP.UTF-8
+    login_user: postgres
+  become: yes
+  become_user: postgres
+  become_method: sudo
+
+- name: create user
+  postgresql_user:
+    db: "{{ pg.dbname }}"
+    name: "{{ pg.dbuser }}"
+    password: "{{ pg.dbpass }}"
+    priv: ALL
+    state: present
+    login_user: postgres
+  become: yes
+  become_user: postgres
+  become_method: sudo

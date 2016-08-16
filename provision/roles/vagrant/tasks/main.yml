@@ -1,0 +1,4 @@
+- name: rebuild vbox
+  become: yes
+  become_method: sudo
+  shell: /etc/init.d/vboxadd setup

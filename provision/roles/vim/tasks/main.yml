@@ -1,0 +1,15 @@
+- name: generate .vimrc with plugins
+  become: yes
+  become_user: '{{ user }}'
+  template: src=.vimrc.j2 dest=~/.vimrc
+
+- name: create directory for neobundle
+  become: yes
+  become_user: '{{ user }}'
+  file: path=~/.vim/bundle state=directory
+
+- name: clone neobundle file
+  become: yes
+  become_user: '{{ user }}'
+  git: repo=https://github.com/Shougo/neobundle.vim.git dest=~/.vim/bundle/neobundle.vim
+

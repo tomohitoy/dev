@@ -1,0 +1,29 @@
+- name: setting dev server
+  hosts: dev_server
+  remote_user: vagrant
+  vars:
+    app_name: dev_app
+    server_name: '192.168.33.10'
+    rails_root: "/home/{{ user }}/{{ app_name }}"
+    environtment: vagrant
+    user: vagrant
+    home: "/home/{{ user }}"
+    rails:
+      version: '5.0.0'
+    ruby:
+      user:
+      version: '2.3.1'
+    pg:
+      dbuser: pg_dev
+      dbpass: password
+      dbname: dev
+      user: postgres
+      port: 5432
+      version: '9.5.3'
+  roles:
+    - common
+    - rbenv
+    - postgresql
+    - vagrant
+    - vim
+    - nginx

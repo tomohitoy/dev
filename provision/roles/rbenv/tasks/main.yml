@@ -1,0 +1,45 @@
+- name: check ruby existence
+  become: yes
+  become_user: "{{ user }}"
+  shell: which ruby
+  register: ruby_install
+  failed_when: ruby_install.rc not in [0,1]
+
+- name: clone rbenv
+  become: yes
+  become_user: "{{ user }}"
+  git: repo=https://github.com/sstephenson/rbenv.git dest={{ home }}/.rbenv
+  when: ruby_install.rc == 1
+
+- name: clone ruby-build
+  become: yes
+  become_user: "{{ user }}"
+  git: repo=https://github.com/sstephenson/ruby-build.git dest={{ home }}/.rbenv/plugins/ruby-build
+  when: ruby_install.rc == 1
+
+- name: set path for .bash_profile
+  become: yes
+  become_user: "{{ user }}"
+  lineinfile: >
+    dest="{{ home }}/.bash_profile"
+    line="export PATH=$HOME/.rbenv/bin:$PATH"
+
+- name: add rbenv init to .bash_profile
+  become: yes
+  become_user: "{{ user }}"
+  lineinfile: >
+    dest="{{ home }}/.bash_profile"
+    line='eval "$(rbenv init -)"'
+
+- name: install ruby
+  become: yes
+  become_user: "{{ user }}"
+  shell: bash -lc "CONFIGURE_OPTS="--disable-install-rdoc" rbenv install -s {{ ruby.version }} "
+  when: ruby_install.rc == 1
+
+- name: rehash rbenv
+  become: yes
+  become_user: "{{ user }}"
+  shell: bash -lc "rbenv global {{ ruby.version }} && rbenv rehash"
+  when: ruby_install.rc == 1
+

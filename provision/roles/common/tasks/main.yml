@@ -1,0 +1,63 @@
+# common setting
+
+- name: disallow root SSH access
+  become: yes
+  become_method: sudo
+  lineinfile: dest=/etc/ssh/sshd_config regexp="^#PermitRootLogin " line="PermitRootLogin no" state=present
+  notify: restart sshd
+
+- name: disallow password authentication
+  become: yes
+  become_method: sudo
+  lineinfile: dest=/etc/ssh/sshd_config regexp="^#PasswordAuthentication " line="PasswordAuthentication no" state=present
+  notify: restart sshd
+
+ # package installation
+- name: add EPEL
+  become: yes
+  become_method: sudo
+  shell: creates=/etc/yum.repos.d/epel.repo rpm -Uvh --replacepkgs http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+- name: yum update
+  become: yes
+  become_method: sudo
+  yum: name=* state=latest
+
+- name: install basic packages
+  become: yes
+  become_method: sudo
+  yum: name={{ item }} state=installed
+  with_items:
+    - git
+    - curl
+    - wget
+    - libselinux-python
+    - ruby-devel
+    - readline-devel
+    - ncurses-devel
+    - gdbm-devel
+    - openssl-devel
+    - libxslt-devel
+    - libyaml
+    - libyaml-devel
+    - tcl-devel
+    - db4-devel
+    - libffi-devel
+    - gcc
+    - libxml2
+    - libxml2-devel
+    - libxslt
+    - libxslt-devel
+    - ImageMagick
+    - ImageMagick-devel
+    - vim
+
+- name: install Development Tool
+  become: yes
+  become_method: sudo
+  yum: name="@Development tools" state=present
+
+- name: disable SELinux
+  become: yes
+  become_method: sudo
+  selinux: state=disabled
