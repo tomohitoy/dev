@@ -19,7 +19,7 @@
 
 2. CentOS 6.7をVagrantboxに追加する
   * 利用しているBoxは`centos67`と命名しVagrantfileに設定済み。
-  * centos67として設定するには、下記のスクリプト。
+  * centos67として設定するには、下記のコマンド。
   * `vagrant box add centos67 https://github.com/CommanderK5/packer-centos-template/releases/download/0.6.7/vagrant-centos-6.7.box`
   * vagrantboxは[http://www.vagrantbox.es/](こちら)から参照
   * CentOS6.7では動作確認。
