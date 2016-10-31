@@ -1,7 +1,51 @@
-set autoindent
+" File encoding
+set fileencoding=utf-8
+set fileencodings=ucs-boms,utf-8,euc-jp,cp932
+set fileformats=unix,dos,mac
+set ambiwidth=double
+
+" tabs and indents
 set expandtab
 set tabstop=4
+set softtabstop=4
+set autoindent
+set smartindent
 set shiftwidth=4
+set smarttab
+
+" text search
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+
+" cursor
+set whichwrap=b,s,h,l,<,>,[,],~
+set number
+set cursorline
+nnoremap j gj
+nnoremap k gk
+nnoremap <down> gj
+nnoremap <up> gk
+set backspace=indent,eol,start   "
+
+" parenthesis
+set showmatch
+
+" command autofile
+set wildmenu
+set history=5000
+
+
+set list
+set title
+set nf=alpha
+inoremap <silent> jj <ESC>
+syntax on
+colorscheme default
+
+
+
 au FileType python setlocal sw=4 ts=4 ss=2
 au FileType html setlocal sw=2 ts=2 ss=2
 au FileType css setlocal sw=2 ts=2 ss=2
@@ -10,16 +54,6 @@ au FileType typescript setlocal sw=2 ts=2 ss=2
 au FileType json setlocal sw=2 ts=2 ss=2
 au FileType javascript setlocal sw=2 ts=2 ss=2
 au FileType markdown setlocal sw=2 ts=2 ss=2
-set list
-set showmatch
-set smartindent
-set smarttab
-set number
-set title
-set nf=alpha
-inoremap <silent> jj <ESC>
-syntax on
-colorscheme default
 
 """"""""""""""""""""""""""""""
 " emmetの設定
